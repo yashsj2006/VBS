@@ -20,6 +20,8 @@ public class TransactionController {
     TransactionRepo transactionRepo;
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    HistoryRepo historyRepo;
     @PostMapping("/deposit")
     public String deposit(@RequestBody TransactionDto obj)
     {
