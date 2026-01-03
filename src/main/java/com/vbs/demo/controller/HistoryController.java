@@ -16,7 +16,7 @@ public class HistoryController {
     @Autowired
     HistoryRepo historyRepo;
     @GetMapping("/histories")
-        public List<History> getUserHistory()
+    public List<History> display()
     {
         return historyRepo.findAll();
     }
