@@ -93,4 +93,49 @@ public class TransactionController {
     {
         return transactionRepo.findAllByUserId(id);
     }
+    @PostMapping("/update")
+    public String update(@RequestBody UpdateDto obj)
+    {
+        User user=userRepo.findById(obj.getId()).orElseThrow(()->new RuntimeException("User Not Found"));
+        History h1=new History();
+        if(obj.getKey().equalsIgnoreCase("name"))
+        {
+            if(user.getName().equalsIgnoreCase(obj.getValue()))
+            {
+                return"Cannot be Same";
+            }
+            h1.setDescription("User changed Name from "+user.getName()+" to "+obj.getValue());
+            user.setName(obj.getValue());
+        }
+        else if(obj.getKey().equalsIgnoreCase("password"))
+        {
+            if(user.getPassword().equalsIgnoreCase(obj.getValue()))
+            {
+                return"Cannot be Same";
+            }
+            h1.setDescription("User "+user.getName()+"changed name");
+            user.setPassword(obj.getValue());
+        }
+        else if(obj.getKey().equalsIgnoreCase("Email"))
+        {
+            if(user.getEmail().equalsIgnoreCase(obj.getValue()))
+            {
+                return"Cannot be Same";
+            }
+            User user2=userRepo.findByEmail(obj.getValue());
+            if(user2!=null)
+            {
+                return"Email Already Exists";
+            }
+            h1.setDescription("User changed Email from "+user.getEmail()+" to "+obj.getValue());
+            user.setEmail(obj.getValue());
+        }
+        else {
+            return"Invalid Key";
+        }
+        historyRepo.save(h1);
+        userRepo.save(user);
+        return"Update Done Successfully";
+    }
+}
 }
